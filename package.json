@@ -1,16 +1,16 @@
 {
-  "dependencies": {
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
-  },
-  "name": "09-utils",
+  "name": "my-utils",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist",
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
+  }
 }

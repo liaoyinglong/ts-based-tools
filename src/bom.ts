@@ -28,3 +28,29 @@ export function getExplore(): string {
   if (sys.safari) return 'Safari: ' + sys.safari
   return 'Unkonwn'
 }
+/**
+ * 获取滚动条到顶部的距离
+ */
+export function getScrollTop(): number {
+  return (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop
+}
+
+export interface offset {
+  left: number
+  top: number
+}
+/**
+ * 获取元素距离文档顶部的高，类似JQ中的offset()
+ */
+export function offset(el: HTMLElement): offset {
+  let pos: offset = {
+    left: 0,
+    top: 0,
+  }
+  while (el) {
+    pos.left += el.offsetLeft
+    pos.top = el.offsetTop
+    el = el.offsetParent as HTMLElement
+  }
+  return pos
+}

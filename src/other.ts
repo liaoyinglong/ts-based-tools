@@ -1,3 +1,11 @@
+export interface anyObject {
+  [key: string]: any
+  [key: number]: any
+}
+interface o {
+  [key: string]: number
+}
+
 /**
  * 判断是否时间类型数据
  */
@@ -12,21 +20,17 @@ export function formatDate(date: Date, fmt: string): string
 export function formatDate(date: string, fmt: string): string
 export function formatDate(date: number, fmt: string): string
 export function formatDate(date: any, fmt: string = 'yyyy-MM-dd hh:mm:ss'): string {
-  if (!isDate(date)) {
-    date = new Date(date)
-  }
+  let time: Date = new Date(date)
   if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    fmt = fmt.replace(RegExp.$1, (time.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
-  interface o {
-    [key: string]: number
-  }
+
   let o: o = {
-    'M+': date.getMonth() + 1,
-    'd+': date.getDate(),
-    'h+': date.getHours(),
-    'm+': date.getMinutes(),
-    's+': date.getSeconds(),
+    'M+': time.getMonth() + 1,
+    'd+': time.getDate(),
+    'h+': time.getHours(),
+    'm+': time.getMinutes(),
+    's+': time.getSeconds(),
   }
   for (const k in o) {
     if (o.hasOwnProperty(k)) {
@@ -50,9 +54,9 @@ function formatPassTime(startTime: number): string
 function formatPassTime(startTime: string): string
 function formatPassTime(startTime: Date): string
 function formatPassTime(startTime: any) {
-  startTime = new Date(startTime).getTime()
+  let startDate = new Date(startTime).getTime()
   let currentTime: number = new Date().getTime()
-  let time = currentTime - (startTime as number)
+  let time = currentTime - startDate
   let day = Math.floor(time / (1000 * 60 * 60 * 24))
   let hour = Math.floor(time / (1000 * 60 * 60))
   let min = Math.floor(time / (1000 * 60))
@@ -66,6 +70,28 @@ function formatPassTime(startTime: any) {
   return '刚刚'
 }
 /**
+ *  格式化现在距结束时间的剩余时间
+ */
+function formatRemainTime(endTime: number): string
+function formatRemainTime(endTime: string): string
+function formatRemainTime(endTime: Date): string
+function formatRemainTime(endTime: any): string {
+  let startDate = new Date() //开始时间
+  let endDate = new Date(endTime) //结束时间
+  let t = endDate.getTime() - startDate.getTime() //时间差
+  let d = 0
+  let h = 0
+  let m = 0
+  let s = 0
+  if (t >= 0) {
+    d = Math.floor(t / 1000 / 3600 / 24)
+    h = Math.floor((t / 1000 / 60 / 60) % 24)
+    m = Math.floor((t / 1000 / 60) % 60)
+    s = Math.floor((t / 1000) % 60)
+  }
+  return d + '天 ' + h + '小时 ' + m + '分钟 ' + s + '秒'
+}
+/**
  * 判断两个数组是否相等
  */
 export function isArrayEqual(arr1: any[], arr2: any[]): boolean {
@@ -76,10 +102,7 @@ export function isArrayEqual(arr1: any[], arr2: any[]): boolean {
   }
   return true
 }
-export interface anyObject {
-  [key: string]: any
-  [key: number]: any
-}
+
 /**
  * 判断是否为空对象
  */
